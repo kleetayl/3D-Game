@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     public float speed = 0;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public AudioClip hitSound;
+    private AudioSource audioSource;
 
     private Rigidbody rb;
     private int count;
@@ -15,8 +17,11 @@ public class PlayerController : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
+    {        
         rb = GetComponent<Rigidbody>();
+
+        audioSource = GetComponent<AudioSource>();
+
         count = 0;
 
         SetCountText();
@@ -51,10 +56,12 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            audioSource.PlayOneShot(hitSound);
 
             winTextObject.gameObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
+
+            Destroy(gameObject, 1f);
         }
     }
 
